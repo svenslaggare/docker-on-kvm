@@ -1,0 +1,6 @@
+grub.cfg
+.idea
+disks
+extracted-images
+*.img
+target
