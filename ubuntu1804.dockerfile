@@ -12,6 +12,9 @@ RUN apt-get -qy update && apt-get install -qy sudo lsb-base passwd adduser libsy
 # Basic Utilities
 RUN apt-get -qy update && apt-get install -qy --no-install-recommends lsb-release nano net-tools inetutils-ping dnsutils iproute2 isc-dhcp-client less
 
+# Install DE
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y xubuntu-desktop xfce4-terminal
+
 # Clean apt
 RUN apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
