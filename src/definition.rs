@@ -198,7 +198,8 @@ impl VirtualMachine {
                   <address type="pci" domain="0x0000" bus="0x00" slot="0x1b" function="0x0"/>
                 </sound>
                 <video>
-                  <model type="qxl" ram="65536" vram="65536" vgamem="16384" heads="1" primary="yes"/>
+                  <model type="virtio" heads="1" primary="yes"/>
+                  <alias name="video0"/>
                   <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
                 </video>
                 <redirdev bus="usb" type="spicevmc">
