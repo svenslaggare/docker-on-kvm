@@ -25,7 +25,7 @@ RUN apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms ${shell} --uid ${uid} ${user}\
     && echo "${user} ALL=(ALL) ALL" > "/etc/sudoers.d/${user}"\
     && chmod 0440 "/etc/sudoers.d/${user}"\
-    && echo "ubuntu:ubuntu" | chpasswd
+    && echo "${user}:ubuntu" | chpasswd
 
 # Switch to user
 USER "${user}"
