@@ -17,7 +17,7 @@ use crate::kernel::LinuxKernel;
 #[derive(Debug, StructOpt)]
 #[structopt(name="docker-on-kvm", about="Run docker images as KVM VMs")]
 enum CommandLineInput {
-    #[structopt(about="Runs docker image")]
+    #[structopt(about="Runs a docker image as KVM")]
     Run {
         #[structopt(name="docker_image", help="The tag of the docker image to run")]
         docker_image: String,
@@ -29,7 +29,7 @@ enum CommandLineInput {
         ram_size: u64,
         #[structopt(long, help="The number of CPU cores", default_value="2")]
         num_cpus: u64,
-        #[structopt(long, help="The linux kernel to use.")]
+        #[structopt(long, help="The linux kernel on the current system to use. Use list-kernels command to get the available ones.")]
         kernel: Option<String>,
     },
     #[structopt(about="Simple wrapper around docker build")]
