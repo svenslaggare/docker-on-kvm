@@ -5,3 +5,4 @@ Requirements:
 * docker
 * QEMU/KVM installation
 * libvirt
+* Cargo
