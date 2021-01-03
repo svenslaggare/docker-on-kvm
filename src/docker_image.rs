@@ -99,10 +99,10 @@ pub fn build(filename: &Path, tag: &str) -> Result<(), DockerImageError> {
         .env("LANG", "en")
         .args(&["build", "-t", tag, "-f", filename.to_str().unwrap(), "."]);
 
-    let child = command.spawn().map_err(|_| DockerImageError::FailedToBuild)?;
-    let status = child.wait_with_output().map_err(|_| DockerImageError::FailedToBuild)?;
+    let mut child = command.spawn().map_err(|_| DockerImageError::FailedToBuild)?;
+    let status = child.wait().map_err(|_| DockerImageError::FailedToBuild)?;
 
-    if status.status.success() {
+    if status.success() {
         Ok(())
     } else {
         Err(DockerImageError::FailedToBuild)

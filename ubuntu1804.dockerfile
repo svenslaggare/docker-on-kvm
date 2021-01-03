@@ -15,6 +15,9 @@ RUN apt-get -qy update && apt-get install -qy --no-install-recommends lsb-releas
 # Install DE
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y xubuntu-desktop xfce4-terminal
 
+# Add networking
+RUN echo "[Match]\nName=enp1s0\n\n[Network]\nDHCP=yes\n" > /etc/systemd/network/20-wired.network && systemctl enable systemd-networkd
+
 # Clean apt
 RUN apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
