@@ -90,6 +90,7 @@ fn main() {
 
             let vm_definition = VirtualMachine {
                 name: vm_name,
+                uuid: Some(vm_uuid),
                 kernel_file: selected_kernel.kernel.clone(),
                 initrd_file: selected_kernel.initrd.clone(),
                 root_disk: Disk::File {

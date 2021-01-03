@@ -20,6 +20,7 @@ pub enum Disk {
 
 pub struct VirtualMachine {
     pub name: String,
+    pub uuid: Option<String>,
     pub kernel_file: String,
     pub initrd_file: String,
     pub root_disk: Disk,
@@ -69,10 +70,16 @@ impl VirtualMachine {
             }
         };
 
+        let uuid = match self.uuid.as_ref() {
+            Some(uuid) => format!("<uuid>{}</uuid>", uuid),
+            None => String::new()
+        };
+
         Some(format!(
             r#"
             <domain type="kvm">
               <name>{name}</name>
+              {uuid}
               <metadata>
                 <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
                   <libosinfo:os id="http://ubuntu.com/ubuntu/18.04"/>
@@ -219,6 +226,7 @@ impl VirtualMachine {
             </domain>
             "#,
             name = self.name,
+            uuid = uuid,
             kernel_file = self.kernel_file,
             initrd_file = self.initrd_file,
             root_disk_xml = root_disk_xml,
