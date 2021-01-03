@@ -6,9 +6,11 @@ ARG uid=1000
 ARG home=/home/ubuntu
 ARG shell=/bin/bash
 
+# To get working system
+RUN apt-get -qy update && apt-get install -qy sudo lsb-base passwd adduser libsystemd0 libpam-systemd libselinux1 debconf procps kmod
+
 # Basic Utilities
-RUN apt-get -qy update && apt-get install -qy sudo lsb-base passwd adduser libsystemd0 libpam-systemd libselinux1 debconf procps
-RUN apt-get -qy update && apt-get install -qy --no-install-recommends lsb-release nano net-tools inetutils-ping dnsutils kmod iproute2 isc-dhcp-client less
+RUN apt-get -qy update && apt-get install -qy --no-install-recommends lsb-release nano net-tools inetutils-ping dnsutils iproute2 isc-dhcp-client less
 
 # Clean apt
 RUN apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*

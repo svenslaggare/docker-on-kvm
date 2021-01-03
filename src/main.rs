@@ -29,6 +29,8 @@ enum CommandLineInput {
         ram_size: u64,
         #[structopt(long, help="The number of CPU cores", default_value="2")]
         num_cpus: u64,
+        #[structopt(long, help="The linux kernel to use.")]
+        kernel: Option<String>,
     },
     #[structopt(about="Simple wrapper around docker build")]
     Build {
@@ -36,15 +38,26 @@ enum CommandLineInput {
         filename: String,
         #[structopt(name="tag", help="The tag to build as")]
         tag: String
-    }
+    },
+    #[structopt(about="Lists the linux kernels available")]
+    ListKernels
 }
 
 fn main() {
     let command_line_input = CommandLineInput::from_args();
 
     match command_line_input {
-        CommandLineInput::Run { docker_image, name, disk_size, ram_size, num_cpus } => {
+        CommandLineInput::Run { docker_image, name, disk_size, ram_size, num_cpus, kernel } => {
             let kernels = LinuxKernel::find().unwrap();
+            let selected_kernel = match kernel {
+                Some(kernel) => {
+                    kernels
+                        .iter()
+                        .find(|linux_kernel| &linux_kernel.version == &kernel)
+                        .expect("Could not find the specified linux kernel.")
+                },
+                None => kernels.last().unwrap()
+            };
 
             let vm_name = name;
             let vm_uuid = uuid::Uuid::new_v4().to_simple().to_string();
@@ -65,8 +78,6 @@ fn main() {
                     &docker_image_extraction
                 ).unwrap();
             }
-
-            let selected_kernel = kernels.last().unwrap();
 
             println!("Creating VM {} ({}) using docker image {} and kernel {}", vm_name, vm_uuid, docker_image, selected_kernel.version);
 
@@ -93,6 +104,12 @@ fn main() {
         }
         CommandLineInput::Build { filename, tag } => {
             docker_image::build(Path::new(&filename), &tag).unwrap();
+        },
+        CommandLineInput::ListKernels => {
+            println!("Found the following linux kernels:");
+            for kernel in LinuxKernel::find().unwrap() {
+                println!("{} (path: {}, active: {})", kernel.version, kernel.kernel, kernel.active)
+            }
         }
     }
 }
